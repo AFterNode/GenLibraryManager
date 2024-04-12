@@ -1,0 +1,5 @@
+name: GenLibManager
+version: '${version}'
+main: cn.afternode.genlibman.spigot.GenLibManagerPlugin
+api-version: '1.17'
+load: STARTUP

@@ -1,0 +1,10 @@
+repository:
+  # Remove Maven Central
+  # Enable this to use mirror (add into repositories)
+  remove-central: false
+  repositories:
+    CodeMC: "https://repo.codemc.io/repository/maven-public/"
+
+classpath:
+  # Use smart classpath appender (for hybrid server)
+  use-smart-appender: false

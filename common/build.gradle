@@ -1,0 +1,9 @@
+dependencies {
+    include 'org.apache.maven.resolver:maven-resolver:1.9.18'
+    include 'org.apache.maven.resolver:maven-resolver-api:1.9.18'
+    include 'org.apache.maven.resolver:maven-resolver-supplier:1.9.18'
+    include 'org.apache.maven:maven-resolver-provider:3.9.6'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}

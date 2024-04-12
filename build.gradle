@@ -1,0 +1,30 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+}
+
+group = 'cn.afternode'
+version = '0.1.0'
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    plugins.apply("java")
+    plugins.apply("com.github.johnrengelman.shadow")
+
+    configurations {
+        include
+        implementation.extendsFrom(include)
+    }
+
+    shadowJar {
+        configurations = [project.configurations.include]
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

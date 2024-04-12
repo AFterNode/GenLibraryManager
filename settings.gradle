@@ -1,0 +1,4 @@
+rootProject.name = 'GenLibManager'
+include 'common'
+include 'api'
+include 'spigot'

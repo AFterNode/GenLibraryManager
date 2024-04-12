@@ -1,0 +1,55 @@
+repositories {
+    mavenCentral()
+    maven {
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+}
+
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT"
+
+    include 'org.apache.maven.resolver:maven-resolver-api:1.9.18'
+
+    include project(":api")
+    include project(":common")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+shadowJar {
+    relocate "javax.inject", "cn.afternode.genlibman.libs.javaxinject"
+    relocate "org.apache.maven", "cn.afternode.genlibman.libs.maven"
+    relocate "org.apache.commons", "cn.afternode.genlibman.libs.commons"
+    relocate "org.apache.http", "cn.afternode.genlibman.libs.http"
+    relocate "org.codehaus.plexus", "cn.afternode.genlibman.libs.plexus"
+    relocate "org.eclipse.aether", "cn.afternode.genlibman.libs.aether"
+    relocate "org.sonatype.inject", "cn.afternode.genlibman.libs.sonatypeinject"
+
+    dependencies {
+        exclude dependency("org.slf4j:slf4j-api")
+        exclude dependency("org.eclipse.sisu:org.eclipse.sisu.inject")
+    }
+
+    minimize()
+}
+
+jar.manifest {
+    attributes "Premain-Class": "cn.afternode.genlibman.common.agent.GenLibManagerAgent"
+    attributes "Agent-Class": "cn.afternode.genlibman.common.agent.GenLibManagerAgent"
+}
