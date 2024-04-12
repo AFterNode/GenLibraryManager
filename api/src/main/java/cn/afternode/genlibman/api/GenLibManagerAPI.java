@@ -8,6 +8,7 @@ public class GenLibManagerAPI {
     /**
      * Get current platform
      */
+    @API(status = API.Status.STABLE)
     public static GenLibManagerPlatform getPlatform() {
         return platform;
     }
