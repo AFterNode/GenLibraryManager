@@ -6,6 +6,7 @@ import org.eclipse.aether.transfer.TransferListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class MavenRepositoryManagerBuilder {
@@ -13,7 +14,7 @@ public class MavenRepositoryManagerBuilder {
     private final List<RemoteRepository> repositories = new ArrayList<>();
 
     private TransferListener transferListener;
-    private Consumer<File> appendFunc;
+    private BiConsumer<File, ClassLoader> appendFunc;
 
     private MavenRepositoryManagerBuilder() {
         this.targetDir = new File("libraries");
@@ -45,7 +46,7 @@ public class MavenRepositoryManagerBuilder {
         return this;
     }
 
-    public MavenRepositoryManagerBuilder appenderFunc(Consumer<File> func) {
+    public MavenRepositoryManagerBuilder appenderFunc(BiConsumer<File, ClassLoader> func) {
         this.appendFunc = func;
         return this;
     }

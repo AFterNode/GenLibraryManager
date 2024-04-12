@@ -32,12 +32,12 @@ public class ClassPathAppender {
         }
     }
 
-    public static void append(File file) {
+    public static void append(File file, ClassLoader loader) {
         try {
-            appendA(file);
+            appendA(file, loader);
         } catch (Throwable t) {
             try {
-                appendB(file);
+                appendB(file, loader);
             } catch (Throwable th) {
                 throw new RuntimeException("All append functions failed (A: %s)".formatted(t.getCause()), th);
             }
@@ -47,9 +47,8 @@ public class ClassPathAppender {
     /**
      * URLClassLoader appender
      */
-    public static void appendA(File file) {
+    public static void appendA(File file, ClassLoader ldr) {
         try {
-            ClassLoader ldr = ClassPathAppender.class.getClassLoader();
             Method m = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             m.trySetAccessible();
             m.invoke(ldr, file.toURI().toURL());
@@ -61,10 +60,8 @@ public class ClassPathAppender {
     /**
      * AppClassLoader appender
      */
-    public static void appendB(File file) {
+    public static void appendB(File file, ClassLoader ldr) {
         try {
-            ClassLoader ldr = ClassPathAppender.class.getClassLoader();
-
             Field ucp;
             try {
                 try {
@@ -85,7 +82,7 @@ public class ClassPathAppender {
     /**
      * SystemClassLoader appender
      */
-    public static void appendZ(File file) throws IOException {
+    public static void appendZ(File file, ClassLoader ldr) throws IOException {
         GenLibManagerAgent.getInstrumentation().appendToSystemClassLoaderSearch(new JarFile(file));
     }
 

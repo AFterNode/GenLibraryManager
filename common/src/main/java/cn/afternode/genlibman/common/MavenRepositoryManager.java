@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class MavenRepositoryManager implements Closeable {
@@ -31,7 +32,7 @@ public class MavenRepositoryManager implements Closeable {
     final RepositorySystem repository;
     List<RemoteRepository> repos;
 
-    Consumer<File> appenderFunc = ClassPathAppender::append;
+    BiConsumer<File, ClassLoader> appenderFunc = ClassPathAppender::append;
 
     public MavenRepositoryManager(File dir, TransferListener listener, List<RemoteRepository> repos) {
         this.repository = new RepositorySystemSupplier().get();
@@ -43,15 +44,15 @@ public class MavenRepositoryManager implements Closeable {
         this.repos = this.repository.newResolutionRepositories(this.session, repos);
     }
 
-    public void resolve(String name, String checkClass) throws IOException {
+    public void resolve(String name, String checkClass, ClassLoader ldr) throws IOException {
         try {
             Class.forName(checkClass);
         } catch (ClassNotFoundException cnf) {
-            resolve(name);
+            resolve(name, ldr);
         }
     }
 
-    public void resolve(String name) throws IOException {
+    public void resolve(String name, ClassLoader ldr) throws IOException {
         assert !closed;
 
         Artifact artifact = new DefaultArtifact(name);
@@ -68,13 +69,13 @@ public class MavenRepositoryManager implements Closeable {
 
 //        Instrumentation inst = GenLibManagerAgent.getInstrumentation();
         for (ArtifactResult r: result.getArtifactResults()) {
-            appendClasspath(r.getArtifact().getFile());
+            appendClasspath(r.getArtifact().getFile(), ldr);
         }
     }
 
-    public void appendClasspath(File file) {
+    public void appendClasspath(File file, ClassLoader ldr) {
         assert !closed;
-        appenderFunc.accept(file);
+        appenderFunc.accept(file, ldr);
     }
 
     public void addRepository(String id, String url) {
