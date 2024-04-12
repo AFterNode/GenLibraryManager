@@ -20,7 +20,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             group project.group
-            artifactId "genlibmanager-api"
+            artifactId project.name
             version project.version
             from components.java
         }
