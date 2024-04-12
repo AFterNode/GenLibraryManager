@@ -1,6 +1,26 @@
+plugins {
+    id 'maven-publish'
+}
+
 dependencies {
     compileOnly project(":common")
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            group project.group
+            artifactId "genlibmanager-api"
+            version project.version
+            from components.java
+        }
+    }
 }

@@ -12,6 +12,9 @@ allprojects {
 }
 
 subprojects {
+    group = parent.group
+    version = parent.version
+
     plugins.apply("java")
     plugins.apply("com.github.johnrengelman.shadow")
 
