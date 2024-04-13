@@ -13,6 +13,7 @@ repositories {
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT"
 
+    include 'cn.afternode.commons:bukkit:1.6.1'
     include 'org.apache.maven.resolver:maven-resolver-api:1.9.18'
 
     include project(":api")

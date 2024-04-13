@@ -1,5 +1,6 @@
 package cn.afternode.genlibman.spigot;
 
+import cn.afternode.commons.bukkit.configurations.ConfigurationMerger;
 import cn.afternode.genlibman.api.GenLibManagerAPI;
 import cn.afternode.genlibman.api.GenLibManagerPlatform;
 import cn.afternode.genlibman.common.ClassPathAppender;
@@ -8,9 +9,13 @@ import cn.afternode.genlibman.common.MutableTransferListener;
 import cn.afternode.genlibman.common.agent.GenLibManagerAgent;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -20,6 +25,20 @@ public final class GenLibManagerPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         MavenRepositoryManagerBuilder builder = MavenRepositoryManagerBuilder.create();
+
+        // Update config.yml
+        File cfgFile = new File(getDataFolder(), "config.yml");
+        try {
+            ConfigurationMerger.migrate(
+                    YamlConfiguration.loadConfiguration(cfgFile),
+                    YamlConfiguration.loadConfiguration(new InputStreamReader(
+                            Objects.requireNonNull(getResource("config.yml"), "Resource config.yml")
+                    ))
+            ).save(cfgFile);
+            reloadConfig();
+        } catch (IOException e) {
+            getLogger().log(Level.WARNING, "Unable to update config.yml", e);
+        }
 
         // Load repositories from config.yml
         ConfigurationSection repoSec = Objects.requireNonNull(getConfig().getConfigurationSection("repository"), "repository");
