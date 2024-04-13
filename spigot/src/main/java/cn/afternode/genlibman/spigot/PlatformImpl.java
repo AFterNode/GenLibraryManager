@@ -6,6 +6,7 @@ import cn.afternode.genlibman.api.RemoteRepositoryConfig;
 import cn.afternode.genlibman.common.ClassPathAppender;
 import cn.afternode.genlibman.common.MavenRepositoryManager;
 import cn.afternode.genlibman.common.MavenRepositoryManagerBuilder;
+import cn.afternode.genlibman.common.MutableTransferListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +44,17 @@ public class PlatformImpl implements GenLibManagerPlatform {
         if (this.plugin.getConfig().getBoolean("classpath.use-smart-appender", false))
             builder.appenderFunc(ClassPathAppender::append);
         else builder.appenderFunc(ClassPathAppender::appendB);
+
+        if (!useCentral) builder.clearRepositories();
         for (RemoteRepositoryConfig c: remote)
             builder.remote(c.id(), c.url());
+
+        MutableTransferListener listener = new MutableTransferListener();
+        listener.setStarted((event) -> {
+            plugin.getLogger().info("[Standalone] Downloading %s".formatted(event.getResource().getResourceName()));
+        });
+        builder.listener(listener);
+
         return new MavenRepositoryImpl(loader, builder.build());
     }
 }

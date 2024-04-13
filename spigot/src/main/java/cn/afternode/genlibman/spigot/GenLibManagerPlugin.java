@@ -54,7 +54,7 @@ public final class GenLibManagerPlugin extends JavaPlugin {
         // Transfer logged
         MutableTransferListener listener = new MutableTransferListener();
         listener.setStarted((event) -> {
-            getLogger().info("Downloading %s".formatted(event.getResource().getResourceName()));
+            getLogger().info("[Platform] Downloading %s".formatted(event.getResource().getResourceName()));
         });
         builder.listener(listener);
 
