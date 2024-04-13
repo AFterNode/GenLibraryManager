@@ -41,10 +41,13 @@ shadowJar {
     relocate "org.codehaus.plexus", "cn.afternode.genlibman.libs.plexus"
     relocate "org.eclipse.aether", "cn.afternode.genlibman.libs.aether"
     relocate "org.sonatype.inject", "cn.afternode.genlibman.libs.sonatypeinject"
+    relocate "cn.afternode.commons", "cn.afternode.genlibman.libs.afncommons"
 
     dependencies {
         exclude dependency("org.slf4j:slf4j-api")
         exclude dependency("org.eclipse.sisu:org.eclipse.sisu.inject")
+        exclude dependency("org.apiguardian:apiguardian-api:1.1.2")
+        exclude dependency("org.javassist:javassist")
     }
 
     minimize()
