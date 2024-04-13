@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 
 public final class GenLibManagerPlugin extends JavaPlugin {
-    private final PlatformImpl platform = new PlatformImpl();
+    private final PlatformImpl platform = new PlatformImpl(this);
 
     @Override
     public void onLoad() {

@@ -1,4 +1,7 @@
 repository:
+  # Allow plugins to create standalone repositories
+  allow-standalone: false
+
   # Remove Maven Central
   # Enable this to use mirror (add into repositories)
   remove-central: false
