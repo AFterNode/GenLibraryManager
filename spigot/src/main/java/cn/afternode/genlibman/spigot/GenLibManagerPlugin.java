@@ -59,7 +59,7 @@ public final class GenLibManagerPlugin extends JavaPlugin {
         builder.listener(listener);
 
         // Classpath appender config
-        ConfigurationSection caSec = Objects.requireNonNull(repoSec.getConfigurationSection("classpath"), "classpath");
+        ConfigurationSection caSec = Objects.requireNonNull(getConfig().getConfigurationSection("classpath"), "classpath");
         if (caSec.getBoolean("use-smart-appender", false)) {
             try {
                 GenLibManagerAgent.getInstrumentation();
